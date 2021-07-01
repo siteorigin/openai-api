@@ -1,36 +1,38 @@
 {
-    "name": "vendor_slug/package_slug",
-    "description": ":package_description",
+    "name": "siteorigin/openai_api",
+    "description": "A PHP wrapper for the OpenAI API",
     "keywords": [
-        ":vendor_name",
-        "package_slug"
+        "SiteOrigin",
+        "openai_api"
     ],
-    "homepage": "https://github.com/vendor_slug/package_slug",
+    "homepage": "https://github.com/siteorigin/openai_api",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Greg Priday",
+            "email": "greg@siteorigin.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
         "phpunit/phpunit": "^9.5",
-        "spatie/ray": "^1.10",
-        "vimeo/psalm": "^4.3"
+        "spatie/ray": "^1.27",
+        "vimeo/psalm": "^4.3",
+        "vlucas/phpdotenv": "^5.3"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "SiteOrigin\\OpenAI\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "SiteOrigin\\OpenAI\\Tests\\": "tests"
         }
     },
     "scripts": {
