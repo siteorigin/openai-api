@@ -16,6 +16,12 @@ class Completions extends Request
         $this->config = array_merge($this->config, $config);
     }
 
+    public function setEngine(string $engine): static
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
     /**
      * Prepare a config array for use as a completion query
      *
@@ -52,10 +58,11 @@ class Completions extends Request
     }
 
     /**
-     * Synchronously complete multiple prompts
+     * Synchronously complete multiple prompts using a Guzzle Pool of requests
      *
      * @param array|string[] $prompts
      * @param array $config
+     * @todo Complete this function.
      */
     public function completeMultiple(array $prompts = [''], array $config = [])
     {

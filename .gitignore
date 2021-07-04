@@ -12,3 +12,4 @@ vendor
 .php-cs-fixer.cache
 /.env
 /.env.testing
+.DS_Store

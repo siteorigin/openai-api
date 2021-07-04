@@ -1,5 +1,5 @@
 {
-    "name": "siteorigin/openai_api",
+    "name": "siteorigin/openai-api",
     "description": "A PHP wrapper for the OpenAI API",
     "keywords": [
         "SiteOrigin",
@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": "^8.0",
+        "dallgoot/yaml": "^0.3.2",
         "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {

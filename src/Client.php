@@ -14,10 +14,9 @@ class Client
 
     private GuzzleClient $guzzle;
 
-    public function __construct(string $apiKey, array $options = [])
+    public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
-        $this->options = $options;
         $this->guzzle = new GuzzleClient([
             'base_uri' => sprintf('https://api.openai.com/%s/', self::VERSION),
             'headers' => [
