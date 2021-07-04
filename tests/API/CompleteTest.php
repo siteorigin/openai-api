@@ -13,7 +13,7 @@ class CompleteTest extends BaseTestCase
         $client->completions()->complete('My favorite thing is', [
             'max_tokens' => 8,
             'temperature' => 0.7,
-            'n' => 4
+            'n' => 4,
         ]);
     }
 }

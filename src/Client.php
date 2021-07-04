@@ -20,8 +20,8 @@ class Client
         $this->guzzle = new GuzzleClient([
             'base_uri' => sprintf('https://api.openai.com/%s/', self::VERSION),
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiKey
-            ]
+                'Authorization' => 'Bearer ' . $this->apiKey,
+            ],
         ]);
     }
 

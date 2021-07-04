@@ -23,11 +23,9 @@ class Encoder
 
     public function encode(string $text)
     {
-
     }
 
     public function decode(array $tokens)
     {
-
     }
 }

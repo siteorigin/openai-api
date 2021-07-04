@@ -19,6 +19,7 @@ class Completions extends Request
     public function setEngine(string $engine): static
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -49,7 +50,7 @@ class Completions extends Request
         $query = array_merge($config, ['prompt' => $prompt]);
 
         $client = $this->client->guzzleClient();
-        $response = $client->request( 'POST', sprintf('engines/%s/completions', $this->engine), [
+        $response = $client->request('POST', sprintf('engines/%s/completions', $this->engine), [
             'headers' => ['content-type' => 'application/json'],
             'body' => json_encode($this->prepareQuery($query)),
         ]);
@@ -66,6 +67,5 @@ class Completions extends Request
      */
     public function completeMultiple(array $prompts = [''], array $config = [])
     {
-
     }
 }

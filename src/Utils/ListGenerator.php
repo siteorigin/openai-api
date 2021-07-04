@@ -10,10 +10,10 @@ class ListGenerator
     private static array $defaultConfig = [
         'max_tokens' => 64,
         'temperature' => 0.9125,
-        'presence_penalty' => 0.5
+        'presence_penalty' => 0.5,
     ];
 
-    private Closure|iterable $seed;
+    private Closure | iterable $seed;
 
     private ?string $prompt;
 
@@ -43,13 +43,12 @@ class ListGenerator
      */
     public function __construct(
         Client $client,
-        iterable|callable $seed,
+        iterable | callable $seed,
         callable $itemToString = null,
         string $engine = "davinci",
         int $chunkSize = 5,
         array $config = []
-    )
-    {
+    ) {
         $this->client = $client;
         $this->seed = $seed;
         $this->itemToString = $itemToString;
@@ -61,12 +60,12 @@ class ListGenerator
             'logit_bias' => [
                 // Don't let this quit
                 50256 => -100,
-            ]
+            ],
         ]);
     }
 
     /**
-     * 
+     *
      *
      * @param $prompt
      * @return $this
@@ -74,6 +73,7 @@ class ListGenerator
     public function withPrompt($prompt): self
     {
         $this->prompt = $prompt;
+
         return $this;
     }
 
@@ -85,21 +85,27 @@ class ListGenerator
     protected function getCompleterInput(): string
     {
         $seed = is_callable($this->seed) ? call_user_func($this->seed) : $this->seed;
-        $input = array_map(function($s) {
-            if(!is_null($this->itemToString)) return call_user_func($this->itemToString, $s);
-            else if(is_scalar($s)) return $s;
-            else return null;
+        $input = array_map(function ($s) {
+            if (! is_null($this->itemToString)) {
+                return call_user_func($this->itemToString, $s);
+            } elseif (is_scalar($s)) {
+                return $s;
+            } else {
+                return null;
+            }
         }, $seed);
-        $input = array_filter($input, fn($s) => !is_null($s));
+        $input = array_filter($input, fn ($s) => ! is_null($s));
 
         // Add list indicators
-        $input = array_map(fn($s) => '* ' . $s, $input);
+        $input = array_map(fn ($s) => '* ' . $s, $input);
 
         // Encourage the completion of a new item.
         $input[] = '*';
 
         $input = implode("\n\n", $input);
-        if(!empty($this->prompt)) $input = $this->prompt . "\n\n" . $input;
+        if (! empty($this->prompt)) {
+            $input = $this->prompt . "\n\n" . $input;
+        }
 
         return $input;
     }
@@ -113,13 +119,13 @@ class ListGenerator
     {
         $complete = $this->client->completions($this->engine, $this->config);
 
-        while(true) {
-            if(empty($input) || is_callable($this->seed)) {
+        while (true) {
+            if (empty($input) || is_callable($this->seed)) {
                 $input = $this->getCompleterInput();
             }
 
             $results = $complete->complete($input)->choices;
-            foreach($results as $result) {
+            foreach ($results as $result) {
                 yield trim($result->text);
             }
         }
