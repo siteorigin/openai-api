@@ -17,6 +17,10 @@ class BaseTestCase extends TestCase
 
     protected function getClient($key = null): Client
     {
-        return new Client(apiKey: $key ?? $_ENV['OPENAI_API_KEY']);
+        if (is_null($key)) {
+            $key = $_ENV['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY');
+        }
+
+        return new Client(apiKey: $key);
     }
 }
