@@ -44,4 +44,19 @@ class Client
     {
         return new Files($this);
     }
+
+    public function search(string $engine=Engines::ENGINE_ADA, array $config = []): Search
+    {
+        return new Search($this, $engine, $config);
+    }
+
+    public function classifications(string $engine=Engines::ENGINE_CURIE, array $config = []): Classifications
+    {
+        return new Classifications($this, $engine, $config);
+    }
+
+    public function answers(string $engine=Engines::ENGINE_CURIE, array $config = []): Answers
+    {
+        return new Answers($this, $engine, $config);
+    }
 }
