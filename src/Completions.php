@@ -24,18 +24,6 @@ class Completions extends Request
     }
 
     /**
-     * Prepare a config array for use as a completion query
-     *
-     * @param array $query The query array
-     * @return array A filtered query array
-     */
-    private function prepareQuery(array $query): array
-    {
-        //if(isset($query['logit_bias'])) $query['logit_bias'] = json_encode($query['logit_bias']);
-        return $query;
-    }
-
-    /**
      * Complete the given text.
      *
      * @param string $prompt The prompt string
@@ -51,7 +39,7 @@ class Completions extends Request
 
         $response = $this->request('POST', sprintf('engines/%s/completions', $this->engine), [
             'headers' => ['content-type' => 'application/json'],
-            'body' => json_encode($this->prepareQuery($query)),
+            'body' => json_encode($query),
         ]);
 
         return json_decode($response->getBody()->getContents());

@@ -22,6 +22,9 @@
         <testsuite name="SiteOrigin OpenAI API Test Suite">
             <directory>tests/API/</directory>
         </testsuite>
+        <testsuite name="SiteOrigin OpenAI Utils Test Suite">
+            <directory>tests/Utils/</directory>
+        </testsuite>
     </testsuites>
     <coverage>
         <include>

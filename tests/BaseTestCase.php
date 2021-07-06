@@ -21,6 +21,6 @@ class BaseTestCase extends TestCase
             $key = $_ENV['OPENAI_API_KEY'] ?? getenv('OPENAI_API_KEY');
         }
 
-        return new Client(apiKey: $key);
+        return new Client($key);
     }
 }

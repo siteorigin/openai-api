@@ -6,7 +6,8 @@ use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Exception\BadRequestException;
-use SiteOrigin\OpenAI\Exception\InvalidEndpointException;
+use SiteOrigin\OpenAI\Exception\ConflictException;
+use SiteOrigin\OpenAI\Exception\NotFoundException;
 
 abstract class Request
 {
@@ -32,7 +33,8 @@ abstract class Request
             throw match ($e->getResponse()->getStatusCode()) {
                 400 => new BadRequestException($e),
                 401 => new AuthorizationException($e),
-                404 => new InvalidEndpointException($e),
+                404 => new NotFoundException($e),
+                409 => new ConflictException($e),
                 default => $e,
             };
         }

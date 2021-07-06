@@ -4,7 +4,7 @@ namespace SiteOrigin\OpenAI\Tests\API;
 
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
 
-class EngineTest extends BaseTestCase
+class EnginesTest extends BaseTestCase
 {
     public function test_list_engines()
     {

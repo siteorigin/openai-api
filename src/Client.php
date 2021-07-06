@@ -39,4 +39,9 @@ class Client
     {
         return new Completions($this, $engine, $config);
     }
+
+    public function files(): Files
+    {
+        return new Files($this);
+    }
 }
