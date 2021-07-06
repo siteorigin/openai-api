@@ -16,7 +16,7 @@ class BaseApiException extends RuntimeException
         $this->type = $r->message->type ?? null;
         $message = $r->message->message ?? null;
 
-        parent::__construct($message, $clientException->getCode(), $clientException);
+        parent::__construct($message, (int) $clientException->getCode(), $clientException);
     }
 
     /**

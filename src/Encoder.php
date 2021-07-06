@@ -15,10 +15,15 @@ class Encoder
 
     private array $encoder;
 
+    /**
+     * @var string[]
+     */
+    private array $bpe;
+
     public function __construct()
     {
         $this->encoder = json_decode(file_get_contents(__DIR__.'/../data/encoder.json'), true);
-        $this->bpe = explode("\n", file_get_contents(__DIR__.'/../data/encoder.json'));
+        $this->bpe = explode("\n", file_get_contents(__DIR__.'/../data/vocab.bpe.txt'));
     }
 
     public function encode(string $text)
