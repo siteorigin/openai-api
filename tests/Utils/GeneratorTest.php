@@ -2,8 +2,8 @@
 
 namespace Siteorigin\OpenAI\Tests\Utils;
 
-use SiteOrigin\OpenAI\Utils\ListGenerator;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
+use SiteOrigin\OpenAI\Utils\ListGenerator;
 
 class GeneratorTest extends BaseTestCase
 {
@@ -13,7 +13,7 @@ class GeneratorTest extends BaseTestCase
 
         $generator = new ListGenerator(
             $this->getClient(),
-            function() use ($variableNames){
+            function () use ($variableNames) {
                 return array_slice($variableNames, 0, 150);
             },
             engine: 'babbage',

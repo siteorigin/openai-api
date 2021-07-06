@@ -3,11 +3,9 @@
 namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Exception\BadRequestException;
-use SiteOrigin\OpenAI\Exception\BaseApiException;
 use SiteOrigin\OpenAI\Exception\InvalidEndpointException;
 
 abstract class Request
@@ -28,10 +26,9 @@ abstract class Request
      */
     protected function request(string $method, string $uri = '', array $options = []): ResponseInterface
     {
-        try{
+        try {
             return $this->client->guzzleClient()->request($method, $uri, $options);
-        }
-        catch (ClientException $e) {
+        } catch (ClientException $e) {
             throw match ($e->getResponse()->getStatusCode()) {
                 400 => new BadRequestException($e),
                 401 => new AuthorizationException($e),
