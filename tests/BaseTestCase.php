@@ -15,8 +15,8 @@ class BaseTestCase extends TestCase
         parent::setUp();
     }
 
-    protected function getClient(): Client
+    protected function getClient($key=null): Client
     {
-        return new Client(apiKey: $_ENV['API_KEY']);
+        return new Client(apiKey: $key ?? $_ENV['OPENAI_API_KEY']);
     }
 }

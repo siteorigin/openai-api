@@ -44,13 +44,12 @@ class Completions extends Request
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function complete(string $prompt = '', array $config = [])
+    public function complete(string $prompt = '', array $config = []): object
     {
         $config = array_merge($this->config, $config);
         $query = array_merge($config, ['prompt' => $prompt]);
 
-        $client = $this->client->guzzleClient();
-        $response = $client->request('POST', sprintf('engines/%s/completions', $this->engine), [
+        $response = $this->request('POST', sprintf('engines/%s/completions', $this->engine), [
             'headers' => ['content-type' => 'application/json'],
             'body' => json_encode($this->prepareQuery($query)),
         ]);

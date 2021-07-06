@@ -11,6 +11,6 @@ class EngineTest extends BaseTestCase
         // Lets check that we're able to get a list of engines.
         $client = $this->getClient();
         $engines = $client->engines()->list();
-        $this->assertNotEmpty($engines);
+        $this->assertNotEmpty($engines->data);
     }
 }

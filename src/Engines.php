@@ -7,14 +7,11 @@ class Engines extends Request
     /**
      * Return a list of engines
      *
-     * @return array
+     * @return object
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function list()
+    public function list(): object
     {
-        $client = $this->client->guzzleClient();
-        $engines = $client->get('engines')->getBody()->getContents();
-
-        return json_decode($engines)->data ?? [];
+        return json_decode($this->request('get', 'engines')->getBody()->getContents());
     }
 }

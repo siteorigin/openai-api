@@ -19,8 +19,8 @@
     verbose="true"
 >
     <testsuites>
-        <testsuite name="SiteOrigin OpenAI Test Suite">
-            <directory>tests</directory>
+        <testsuite name="SiteOrigin OpenAI API Test Suite">
+            <directory>tests/API/</directory>
         </testsuite>
     </testsuites>
     <coverage>
