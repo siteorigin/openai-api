@@ -14,6 +14,10 @@ use SiteOrigin\OpenAI\Exception\NotFoundException;
  */
 class Files extends Request
 {
+    const PURPOSE_SEARCH = 'search';
+    const PURPOSE_ANSWERS = 'answers';
+    const PURPOSE_CLASSIFICATIONS = 'classifications';
+
     /**
      * Return a list of engines
      *

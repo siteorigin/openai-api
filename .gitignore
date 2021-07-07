@@ -13,3 +13,5 @@ vendor
 /.env
 /.env.testing
 .DS_Store
+/wiki
+/.scratch

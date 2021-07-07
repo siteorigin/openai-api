@@ -8,7 +8,7 @@ class Classifications extends Request
 
     private array $config;
 
-    public function __construct(Client $client, string $engine = Engines::ENGINE_CURIE, array $config = [])
+    public function __construct(Client $client, string $engine = Engines::CURIE, array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;

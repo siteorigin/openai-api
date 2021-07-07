@@ -13,7 +13,7 @@ class Search extends Request
      * @param string $engine The engine to use for searching.
      * @param array $config Default config settings.
      */
-    public function __construct(Client $client, string $engine = Engines::ENGINE_ADA, array $config = [])
+    public function __construct(Client $client, string $engine = Engines::ADA, array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;

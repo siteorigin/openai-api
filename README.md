@@ -7,21 +7,23 @@
 
 ---
 
-A PHP wrapper that makes it easy to use the OpenAI API from your PHP application. Covers the entire OpenAI API, in a familiar PHP way, without limiting any functionality.
+GPT-3 lets you inject a little bit of AI magic into your apps, and this PHP wrapper makes it even easier to access. Covers the entire OpenAI API, in a familiar PHP way, without limiting any functionality.
 
 ```php
 use SiteOrigin\OpenAI\Client;
-$client = new Client($key);
+$client = new Client($_ENV['OPENAI_API_KEY']);
 $completions = $client->completions('davinci')->complete("The most important technology for humanity is", [
-  'max_tokens' => 32,
-  'temperature' => 0.8,
-  'n' => 4,
-  'stop' => ["\n", '.']
+    'max_tokens' => 32,
+    'temperature' => 0.8,
+    'n' => 4,
+    'stop' => ["\n", '.']
 ]);
 foreach($completions as $c) {
-	echo $c->text . "\n";
+    echo $c->text . "\n";
 }
 ```
+
+Read more on the [documentation wiki](https://github.com/siteorigin/openai-api/wiki).
 
 ## Installation
 
@@ -38,37 +40,39 @@ For most of the features of this wrapper, you should have an understanding of th
 ```php
 // Set up a client with your API key.
 use SiteOrigin\OpenAI\Client;
-$client = new Client($key);
+use SiteOrigin\OpenAI\Engines;
+
+$client = new Client($_ENV['OPENAI_API_KEY']);
 
 // Create a completion call
-$c = $client->completions('davinci')->complete($prompt, $options);
+$c = $client->completions(Engines::BABBAGE)->complete('The meaning of life is: ', [ /* ... */]);
 
 // List all the available engines
 $e = $client->engines()->list();
 
 // Perform a search
-$r = $client->search()->search('President', [
-  "White House","hospital","school"
+$r = $client->search(Engines::ADA)->search('President', [
+    "White House","hospital","school"
 ]);
-$r = $client->search()->search('President', 'the-file-id')
+$r = $client->search('curie')->search('President', 'the-file-id');
 
 // Request an Answer
 $documents = [
-	"Puppy named Bailey is happy.",
-	"Puppy named Bella is sad.",
+    "Puppy named Bailey is happy.",
+    "Puppy named Bella is sad.",
 ];
-$a = $client->answers()->create(
-  'Which puppy is happy?',
-  $documents, // Or a file-id
-  'In 2017, U.S. life expectancy was 78.6 years.',
-  [["What is human life expectancy in the United States?","78 years."]],
-  ["max_tokens" => 5, "stop" => ["\n", "<|endoftext|>"] ]
+$a = $client->answers(Engines::CURIE)->create(
+    'Which puppy is happy?',
+    $documents, // Or a file-id
+    'In 2017, U.S. life expectancy was 78.6 years.',
+    [["What is human life expectancy in the United States?","78 years."]],
+    ["max_tokens" => 5, "stop" => ["\n", "<|endoftext|>"] ]
 );
 
 // Request a Classification
-$c = $client->classifications()->create(
-	'It is a raining day :(',
-  [["A happy moment", "Positive"],["I am sad.", "Negative"],["I am feeling awesome", "Positive"]]
+$c = $client->classifications(Engines::BABBAGE)->create(
+    'It is a raining day :(',
+    [["A happy moment", "Positive"],["I am sad.", "Negative"],["I am feeling awesome", "Positive"]]
 );
 $c = $client->classifications()->create("I'm so happy to be alive", 'the-file-id');
 ```

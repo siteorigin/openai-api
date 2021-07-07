@@ -14,13 +14,14 @@ class Client
 
     private GuzzleClient $guzzle;
 
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, string $organization = null)
     {
         $this->apiKey = $apiKey;
         $this->guzzle = new GuzzleClient([
             'base_uri' => sprintf('https://api.openai.com/%s/', self::VERSION),
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->apiKey,
+                'OpenAI-Organization' => $organization,
             ],
         ]);
     }
@@ -45,17 +46,17 @@ class Client
         return new Files($this);
     }
 
-    public function search(string $engine = Engines::ENGINE_ADA, array $config = []): Search
+    public function search(string $engine = Engines::ADA, array $config = []): Search
     {
         return new Search($this, $engine, $config);
     }
 
-    public function classifications(string $engine = Engines::ENGINE_CURIE, array $config = []): Classifications
+    public function classifications(string $engine = Engines::CURIE, array $config = []): Classifications
     {
         return new Classifications($this, $engine, $config);
     }
 
-    public function answers(string $engine = Engines::ENGINE_CURIE, array $config = []): Answers
+    public function answers(string $engine = Engines::CURIE, array $config = []): Answers
     {
         return new Answers($this, $engine, $config);
     }

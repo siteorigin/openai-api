@@ -4,13 +4,13 @@ namespace SiteOrigin\OpenAI;
 
 class Engines extends Request
 {
-    const ENGINE_DAVINCI = 'davinci';
-    const ENGINE_CURIE = 'curie';
-    const ENGINE_BABBAGE = 'babbage';
-    const ENGINE_ADA = 'ada';
+    const DAVINCI = 'davinci';
+    const CURIE = 'curie';
+    const BABBAGE = 'babbage';
+    const ADA = 'ada';
 
-    const ENGINE_DAVINCI_INSTRUCT = 'davinci-instruct-beta';
-    const ENGINE_CURIE_INSTRUCT = 'curie-instruct-beta';
+    const DAVINCI_INSTRUCT = 'davinci-instruct-beta';
+    const CURIE_INSTRUCT = 'curie-instruct-beta';
 
     /**
      * Return a list of engines
