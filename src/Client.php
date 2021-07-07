@@ -17,12 +17,17 @@ class Client
     public function __construct(string $apiKey, string $organization = null)
     {
         $this->apiKey = $apiKey;
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ];
+        if (!empty($organization)) {
+            $headers['OpenAI-Organization'] = $organization;
+        }
+
         $this->guzzle = new GuzzleClient([
             'base_uri' => sprintf('https://api.openai.com/%s/', self::VERSION),
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'OpenAI-Organization' => $organization,
-            ],
+            'headers' => $headers,
         ]);
     }
 
