@@ -21,7 +21,7 @@ class Client
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
         ];
-        if (!empty($organization)) {
+        if (! empty($organization)) {
             $headers['OpenAI-Organization'] = $organization;
         }
 
