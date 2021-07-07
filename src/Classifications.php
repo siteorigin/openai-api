@@ -8,7 +8,7 @@ class Classifications extends Request
 
     private array $config;
 
-    public function __construct(Client $client, string $engine=Engines::ENGINE_CURIE, array $config=[])
+    public function __construct(Client $client, string $engine = Engines::ENGINE_CURIE, array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;
@@ -22,6 +22,7 @@ class Classifications extends Request
     public function setEngine(string $engine): static
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -35,7 +36,7 @@ class Classifications extends Request
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/classifications
      */
-    public function create(string $query, string|array $examples, array $config=[]): object
+    public function create(string $query, string | array $examples, array $config = []): object
     {
         $config = array_merge($this->config, $config);
         $config = array_merge($config, [

@@ -11,7 +11,7 @@ class SearchTest extends BaseTestCase
         $documents = [
             "White House",
             "hospital",
-            "school"
+            "school",
         ];
 
         $result = $this->getClient()->search()->search('President', $documents);

@@ -11,7 +11,7 @@ class ClassificationsTest extends BaseTestCase
         $examples = [
             ["A happy moment", "Positive"],
             ["I am sad.", "Negative"],
-            ["I am feeling awesome", "Positive"]
+            ["I am feeling awesome", "Positive"],
         ];
 
         $result = $this->getClient()->classifications()->create('It is a raining day :(', $examples);

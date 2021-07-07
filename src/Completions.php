@@ -23,6 +23,7 @@ class Completions extends Request
     public function setEngine(string $engine): static
     {
         $this->engine = $engine;
+
         return $this;
     }
 

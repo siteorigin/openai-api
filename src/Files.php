@@ -2,7 +2,6 @@
 
 namespace SiteOrigin\OpenAI;
 
-use GuzzleHttp\Psr7\PumpStream;
 use GuzzleHttp\Psr7\Utils;
 use SiteOrigin\OpenAI\Exception\InvalidArgumentException;
 use SiteOrigin\OpenAI\Exception\NotFoundException;
@@ -50,7 +49,7 @@ class Files extends Request
             $contents = Utils::streamFor($contents());
         } elseif (is_string($contents)) {
             $contents = Utils::streamFor($contents);
-        } elseif (!is_resource($contents)) {
+        } elseif (! is_resource($contents)) {
             throw new InvalidArgumentException('Invalid file contents.');
         }
 
@@ -60,13 +59,13 @@ class Files extends Request
                     'Content-type' => 'multipart/form-data',
                     'name' => 'file',
                     'filename' => $filename,
-                    'contents' => $contents
+                    'contents' => $contents,
                 ],
                 [
                     'name' => 'purpose',
-                    'contents' => $purpose
+                    'contents' => $purpose,
                 ],
-            ]
+            ],
         ]);
 
         return json_decode($response->getBody()->getContents());
@@ -104,6 +103,7 @@ class Files extends Request
     {
         try {
             $response = $this->request('GET', 'files/' . $id);
+
             return json_decode($response->getBody()->getContents());
         } catch (NotFoundException $e) {
             return null;
@@ -140,6 +140,7 @@ class Files extends Request
     {
         try {
             $response = $this->request('DELETE', 'files/' . $id);
+
             return json_decode($response->getBody()->getContents());
         } catch (NotFoundException $e) {
             return null;

@@ -13,7 +13,7 @@ class Answers extends Request
      * @param string $engine The engine to use for searching.
      * @param array $config Default config settings.
      */
-    public function __construct(Client $client, string $engine=Engines::ENGINE_ADA, array $config=[])
+    public function __construct(Client $client, string $engine = Engines::ENGINE_ADA, array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;
@@ -27,6 +27,7 @@ class Answers extends Request
     public function setEngine(string $engine): static
     {
         $this->engine = $engine;
+
         return $this;
     }
 
@@ -42,7 +43,7 @@ class Answers extends Request
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/answers/create
      */
-    public function create(string $question, string|array $documents, string $examplesContext, array $examples, array $config=[]): object
+    public function create(string $question, string | array $documents, string $examplesContext, array $examples, array $config = []): object
     {
         $config = array_merge($this->config, $config);
         $config = array_merge($config, [

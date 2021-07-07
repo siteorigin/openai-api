@@ -2,9 +2,9 @@
 
 namespace SiteOrigin\OpenAI\Tests\API;
 
+use function Amp\Promise\wait;
 use SiteOrigin\OpenAI\Exception\ConflictException;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
-use function Amp\Promise\wait;
 
 /**
  * Test file uploads and deletion. This shouldn't run as part of an automated test suite with production keys.
@@ -27,6 +27,7 @@ class FilesTest extends BaseTestCase
             if ($run == 10) {
                 throw new \Exception('Could not clear temporary files');
             }
+
             try {
                 $files = $client->files()->list();
                 foreach ($files->data as $file) {

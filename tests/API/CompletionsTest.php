@@ -15,7 +15,7 @@ class CompletionsTest extends BaseTestCase
             'max_tokens' => 32,
             'temperature' => 0.8,
             'n' => 4,
-            'stop' => ["\n", '.']
+            'stop' => ["\n", '.'],
         ]);
         $this->assertNotEmpty($c->choices);
     }
