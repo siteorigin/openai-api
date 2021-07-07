@@ -12,12 +12,15 @@ A PHP wrapper that makes it easy to use the OpenAI API from your PHP application
 ```php
 use SiteOrigin\OpenAI\Client;
 $client = new Client($key);
-$client->completions('davinci')->complete("The most important technology for humanity is", [
-    'max_tokens' => 32,
-    'temperature' => 0.8,
-    'n' => 4,
-    'stop' => ["\n", '.']
+$completions = $client->completions('davinci')->complete("The most important technology for humanity is", [
+  'max_tokens' => 32,
+  'temperature' => 0.8,
+  'n' => 4,
+  'stop' => ["\n", '.']
 ]);
+foreach($completions as $c) {
+	echo $c->text . "\n";
+}
 ```
 
 ## Installation
@@ -30,12 +33,44 @@ composer require siteorigin/openai-api
 
 ## Usage
 
+For most of the features of this wrapper, you should have an understanding of the [OpenAI API](https://beta.openai.com/docs/api-reference/introduction).
+
 ```php
+// Set up a client with your API key.
 use SiteOrigin\OpenAI\Client;
 $client = new Client($key);
 
+// Create a completion call
 $c = $client->completions('davinci')->complete($prompt, $options);
+
+// List all the available engines
 $e = $client->engines()->list();
+
+// Perform a search
+$r = $client->search()->search('President', [
+  "White House","hospital","school"
+]);
+$r = $client->search()->search('President', 'the-file-id')
+
+// Request an Answer
+$documents = [
+	"Puppy named Bailey is happy.",
+	"Puppy named Bella is sad.",
+];
+$a = $client->answers()->create(
+  'Which puppy is happy?',
+  $documents, // Or a file-id
+  'In 2017, U.S. life expectancy was 78.6 years.',
+  [["What is human life expectancy in the United States?","78 years."]],
+  ["max_tokens" => 5, "stop" => ["\n", "<|endoftext|>"] ]
+);
+
+// Request a Classification
+$c = $client->classifications()->create(
+	'It is a raining day :(',
+  [["A happy moment", "Positive"],["I am sad.", "Negative"],["I am feeling awesome", "Positive"]]
+);
+$c = $client->classifications()->create("I'm so happy to be alive", 'the-file-id');
 ```
 
 ## Testing
