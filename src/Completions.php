@@ -4,7 +4,6 @@ namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response;
 
 class Completions extends Request
