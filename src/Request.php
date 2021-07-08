@@ -4,12 +4,12 @@ namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Exception\BadRequestException;
 use SiteOrigin\OpenAI\Exception\ConflictException;
 use SiteOrigin\OpenAI\Exception\NotFoundException;
+use SiteOrigin\OpenAI\Exception\RequestException;
 
 abstract class Request
 {
