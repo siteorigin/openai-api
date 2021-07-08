@@ -17,12 +17,12 @@ class GeneratorTest extends BaseTestCase
                 return array_slice($variableNames, 0, 150);
             },
             engine: 'babbage',
-            chunkSize: 3
+            chunkSize: 2
         );
         $generator->withPrompt('This is a random variable name generator:');
 
-        $this->assertNotEmpty($generator->generate()->current());
-        $this->assertNotEmpty($generator->generate()->current());
-        $this->assertNotEmpty($generator->generate()->current());
+        $this->assertNotEmpty($generator->generate()->current(), 'First string is missing.');
+        $this->assertNotEmpty($generator->generate()->current(), 'Second string is missing.');
+        $this->assertNotEmpty($generator->generate()->current(), 'First of next batch is missing.');
     }
 }

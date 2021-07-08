@@ -119,14 +119,27 @@ class ListGenerator
     {
         $complete = $this->client->completions($this->engine, $this->config);
 
+        $emptyCount = 0;
         while (true) {
             if (empty($input) || is_callable($this->seed)) {
                 $input = $this->getCompleterInput();
             }
 
-            $results = $complete->complete($input)->choices;
+            // Get the non empty choice texts
+            $results = array_map(fn ($c) => trim($c->text), $complete->complete($input)->choices);
+            $results = array_filter($results);
+
+            if (empty($results)) {
+                $emptyCount++;
+                if ($emptyCount == 4) {
+                    // Make sure we don't return nothing, too many times in a row.
+                    break;
+                }
+            }
+            $emptyCount = 0;
+
             foreach ($results as $result) {
-                yield trim($result->text);
+                yield trim($result);
             }
         }
     }

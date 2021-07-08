@@ -37,7 +37,6 @@ class Completions extends Request
      * @param string $prompt The prompt string
      * @param array $config Any additional config
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
     public function complete(string $prompt = '', array $config = []): object
