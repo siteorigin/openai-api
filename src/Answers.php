@@ -60,7 +60,7 @@ class Answers extends Request
             $config['documents'] = $documents;
         }
 
-        $response = $this->request('POST', sprintf('answers', $this->engine), [
+        $response = $this->request('POST', 'answers', [
             'headers' => ['content-type' => 'application/json'],
             'body' => json_encode($config),
         ]);

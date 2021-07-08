@@ -3,6 +3,8 @@
 namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Exception\BadRequestException;
@@ -23,7 +25,6 @@ abstract class Request
      * @param string $uri
      * @param array $options
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function request(string $method, string $uri = '', array $options = []): ResponseInterface
     {
@@ -35,8 +36,10 @@ abstract class Request
                 401 => new AuthorizationException($e),
                 404 => new NotFoundException($e),
                 409 => new ConflictException($e),
-                default => $e,
+                default => new RequestException($e),
             };
+        } catch (GuzzleException $e) {
+            throw new RequestException($e);
         }
     }
 }

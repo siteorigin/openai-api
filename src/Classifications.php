@@ -51,7 +51,7 @@ class Classifications extends Request
             $config['examples'] = $examples;
         }
 
-        $response = $this->request('POST', sprintf('classifications', $this->engine), [
+        $response = $this->request('POST', 'classifications', [
             'headers' => ['content-type' => 'application/json'],
             'body' => json_encode($config),
         ]);

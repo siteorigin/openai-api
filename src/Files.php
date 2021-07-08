@@ -4,7 +4,6 @@ namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Psr7\Utils;
 use SiteOrigin\OpenAI\Exception\InvalidArgumentException;
-use SiteOrigin\OpenAI\Exception\NotFoundException;
 
 /**
  * Class Files
@@ -14,23 +13,19 @@ use SiteOrigin\OpenAI\Exception\NotFoundException;
  */
 class Files extends Request
 {
-    const PURPOSE_SEARCH = 'search';
-    const PURPOSE_ANSWERS = 'answers';
-    const PURPOSE_CLASSIFICATIONS = 'classifications';
+    const SEARCH = 'search';
+    const ANSWERS = 'answers';
+    const CLASSIFICATIONS = 'classifications';
 
     /**
-     * Return a list of engines
+     * Return a list of files.
      *
      * @return object
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/files/list
      */
     public function list(): object
     {
-        $client = $this->client->guzzleClient();
-        $engines = $client->get('files')->getBody()->getContents();
-
-        return json_decode($engines);
+        return json_decode($this->request('GET', 'files')->getBody()->getContents());
     }
 
     /**
@@ -38,7 +33,6 @@ class Files extends Request
      * @param string|array|resource $contents The contents of the file as a string, array of objects or file resource.
      * @param string $purpose The purpose of the file. Either "search", "answers" or "classifications".
      * @return object Creation confirmation
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/files/upload
      */
     public function create(string $filename, mixed $contents, string $purpose): object
@@ -80,7 +74,6 @@ class Files extends Request
      *
      * @param string $filename The filename of the file.
      * @return object|null The file object, or null if the file couldn't be found.
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/files/retrieve
      */
     public function retrieveByFilename(string $filename): ?object
@@ -100,18 +93,13 @@ class Files extends Request
      *
      * @param string $id The ID of the file.
      * @return mixed|null The file object, or null if the file couldn't be found.
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @see https://beta.openai.com/docs/api-reference/files/retrieve
      */
     public function retrieve(string $id): ?object
     {
-        try {
-            $response = $this->request('GET', 'files/' . $id);
+        $response = $this->request('GET', sprintf('files/%s', $id));
 
-            return json_decode($response->getBody()->getContents());
-        } catch (NotFoundException $e) {
-            return null;
-        }
+        return json_decode($response->getBody()->getContents());
     }
 
     /**
@@ -142,12 +130,8 @@ class Files extends Request
      */
     public function delete(string $id): ?object
     {
-        try {
-            $response = $this->request('DELETE', 'files/' . $id);
+        $response = $this->request('DELETE', sprintf('files/%s', $id));
 
-            return json_decode($response->getBody()->getContents());
-        } catch (NotFoundException $e) {
-            return null;
-        }
+        return json_decode($response->getBody()->getContents());
     }
 }

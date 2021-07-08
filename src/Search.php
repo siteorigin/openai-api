@@ -44,7 +44,9 @@ class Search extends Request
     public function search(string $query, string | array $documents, array $config = []): object
     {
         $config = array_merge($this->config, $config);
-        $config = array_merge($config, ['query' => $query]);
+        $config = array_merge($config, [
+            'query' => $query,
+        ]);
 
         // Put the source into a filename or a a document array
         if (is_string($documents)) {
