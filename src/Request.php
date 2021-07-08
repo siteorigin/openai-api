@@ -42,4 +42,17 @@ abstract class Request
             throw new RequestException($e);
         }
     }
+
+    /**
+     * Make an async request
+     *
+     * @param string $method
+     * @param string $uri
+     * @param array $options
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    protected function requestAsync(string $method, string $uri = '', array $options = []): \GuzzleHttp\Promise\PromiseInterface
+    {
+        return $this->client->guzzleClient()->requestAsync($method, $uri, $options);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace SiteOrigin\OpenAI\Tests\API;
 
+use SiteOrigin\OpenAI\Engines;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
 
@@ -28,5 +29,28 @@ class CompletionsTest extends BaseTestCase
             'temperature' => 0.7,
             'n' => 4,
         ]);
+    }
+
+    public function test_multiple_concurrent()
+    {
+        $client = $this->getClient();
+        $completions = $client->completions(Engines::BABBAGE)->completeMultiple(
+            [
+                'Every little thing gonna be',
+                'Yesterday, all my troubles seemed so',
+                'Hello darkness my old',
+            ],
+            [
+                'max_tokens' => 32,
+                'temperature' => 0,
+                'stop' => ["\n", '.', ','],
+            ]
+        );
+
+        $r = array_map(fn ($completion) => trim($completion->choices[0]->text), $completions);
+
+        $this->assertEquals('alright', $r[0]);
+        $this->assertEquals('far away', $r[1]);
+        $this->assertEquals('friend', $r[2]);
     }
 }

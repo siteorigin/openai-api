@@ -2,6 +2,11 @@
 
 namespace SiteOrigin\OpenAI;
 
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Response;
+
 class Completions extends Request
 {
     private string $engine;
@@ -54,9 +59,43 @@ class Completions extends Request
      *
      * @param array|string[] $prompts
      * @param array $config
-     * @todo Complete this function.
+     * @param int $concurrency
+     * @return array
      */
-    public function completeMultiple(array $prompts = [''], array $config = [])
+    public function completeMultiple(array $prompts = [], array $config = [], int $concurrency = 5): array
     {
+        $requests = function ($prompts) use ($config) {
+            // We need to return the prompt to keep track of the multiple requests
+            $config = array_merge($this->config, $config);
+
+            foreach ($prompts as $prompt) {
+                $config['prompt'] = $prompt;
+                yield fn () => $this->requestAsync(
+                    "POST",
+                    sprintf('engines/%s/completions', $this->engine),
+                    [
+                        'headers' => ['content-type' => 'application/json'],
+                        'body' => json_encode($config),
+                    ]
+                );
+            }
+        };
+
+        $return = [];
+        $pool = new Pool($this->client->guzzleClient(), $requests($prompts), [
+            'concurrency' => 5,
+            'fulfilled' => function (Response $response, $index) use (&$return) {
+                $return[$index] = json_decode($response->getBody()->getContents());
+            },
+            'rejected' => function (RequestException $reason, $index) use (&$return) {
+                $return[$index] = $reason;
+            },
+        ]);
+
+        // Wait for all the requests.
+        $pool->promise()->wait();
+        ksort($return);
+
+        return $return;
     }
 }
