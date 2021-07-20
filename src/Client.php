@@ -51,6 +51,11 @@ class Client
         return new Files($this);
     }
 
+    public function fineTunes(): FineTunes
+    {
+        return new FineTunes($this);
+    }
+
     public function search(string $engine = Engines::ADA, array $config = []): Search
     {
         return new Search($this, $engine, $config);

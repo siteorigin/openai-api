@@ -44,10 +44,13 @@ class Completions extends Request
         $config = array_merge($this->config, $config);
         $config = array_merge($config, ['prompt' => $prompt]);
 
-        $response = $this->request('POST', sprintf('engines/%s/completions', $this->engine), [
-            'headers' => ['content-type' => 'application/json'],
-            'body' => json_encode($config),
-        ]);
+        $response = $this->request(
+            'POST',
+            $this->engine ? sprintf('engines/%s/completions', $this->engine) : 'completions', [
+                'headers' => ['content-type' => 'application/json'],
+                'body' => json_encode($config),
+            ]
+        );
 
         return json_decode($response->getBody()->getContents());
     }

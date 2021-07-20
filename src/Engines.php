@@ -8,6 +8,7 @@ class Engines extends Request
     const CURIE = 'curie';
     const BABBAGE = 'babbage';
     const ADA = 'ada';
+    const ENGINELESS = '';
 
     const DAVINCI_INSTRUCT = 'davinci-instruct-beta';
     const CURIE_INSTRUCT = 'curie-instruct-beta';
