@@ -10,7 +10,7 @@ class BaseApiException extends RuntimeException
 {
     private ?string $type;
 
-    public function __construct(ClientException|ServerException $clientException)
+    public function __construct(ClientException | ServerException $clientException)
     {
         $r = json_decode($clientException->getResponse()->getBody()->getContents());
 
