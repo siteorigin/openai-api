@@ -91,5 +91,4 @@ class FineTunes extends Request
 
         return json_decode($response->getBody()->getContents());
     }
-
 }

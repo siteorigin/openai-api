@@ -46,7 +46,8 @@ class Completions extends Request
 
         $response = $this->request(
             'POST',
-            $this->engine ? sprintf('engines/%s/completions', $this->engine) : 'completions', [
+            $this->engine ? sprintf('engines/%s/completions', $this->engine) : 'completions',
+            [
                 'headers' => ['content-type' => 'application/json'],
                 'body' => json_encode($config),
             ]
