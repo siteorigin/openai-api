@@ -64,7 +64,7 @@ class Filter extends Request
             }
         }
 
-        if (!in_array($label, array_keys(static::$labels))) {
+        if (! in_array($label, array_keys(static::$labels))) {
             $label = 2;
         }
 

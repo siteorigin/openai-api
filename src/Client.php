@@ -17,8 +17,8 @@ class Client
 
     public function __construct(string $apiKey = null, string $organization = null)
     {
-        $this->apiKey = $apiKey ?: (!empty($_ENV['OPENAI_API_KEY']) ? $_ENV['OPENAI_API_KEY'] : null);
-        $this->organization = $organization ?: (!empty($_ENV['OPENAI_API_ORG']) ? $_ENV['OPENAI_API_ORG'] : null);
+        $this->apiKey = $apiKey ?: (! empty($_ENV['OPENAI_API_KEY']) ? $_ENV['OPENAI_API_KEY'] : null);
+        $this->organization = $organization ?: (! empty($_ENV['OPENAI_API_ORG']) ? $_ENV['OPENAI_API_ORG'] : null);
 
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
@@ -78,8 +78,4 @@ class Client
     {
         return new Search($this, $engine, $config);
     }
-
-
-
-
 }
