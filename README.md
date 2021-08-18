@@ -76,6 +76,9 @@ $c = $client->classifications(Engines::BABBAGE)->create(
     [["A happy moment", "Positive"],["I am sad.", "Negative"],["I am feeling awesome", "Positive"]]
 );
 $c = $client->classifications()->create("I'm so happy to be alive", 'the-file-id');
+
+// Classify safe/unsafe content
+$f = $client->filter()->classify('ponies are fantastic!'); // 'safe'
 ```
 
 ## Testing
