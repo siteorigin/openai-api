@@ -39,7 +39,7 @@ class Completions extends Request
      *
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function complete(string $prompt = '', array $config = []): object
+    public function complete(string|array $prompt = '', array $config = []): object
     {
         $config = array_merge($this->config, $config);
         $config = array_merge($config, ['prompt' => $prompt]);

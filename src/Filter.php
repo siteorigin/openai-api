@@ -21,10 +21,14 @@ class Filter extends Request
         $this->toxicThreshold = $toxicThreshold;
     }
 
-    private function complete(string $text)
+    private function complete(string|array $text)
     {
+        $prompt = is_string($text) ?
+            "<|endoftext|>" . $text . "\n--\nLabel:" :
+            array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
+
         $config = [
-            'prompt' => "<|endoftext|>" . $text . "\n--\nLabel:",
+            'prompt' => $prompt,
             'max_tokens' => 1,
             'temperature' => 0.,
             'top_p' => 0,
@@ -40,34 +44,39 @@ class Filter extends Request
             ]
         );
 
-        return json_decode($response->getBody()->getContents())->choices[0];
+        return json_decode($response->getBody()->getContents())->choices;
     }
 
-    public function classify(string $text): string
+    public function classify(string|array $text): string|array
     {
-        $r = $this->complete($text);
-        $label = (int) $r->text;
+        $choices = $this->complete($text);
+        $return = [];
 
-        if ($label == 2) {
-            $probs = (array) $r->logprobs->top_logprobs[0];
-            if ($probs[2] < $this->toxicThreshold) {
-                $prob0 = $probs[0] ?? 0;
-                $prob1 = $probs[1] ?? 0;
+        foreach ($choices as $choice) {
+            $label = (int) $choice->text;
+            if ($label == 2) {
+                $probs = (array) $choice->logprobs->top_logprobs[0];
+                if ($probs[2] < $this->toxicThreshold) {
+                    $prob0 = $probs[0] ?? 0;
+                    $prob1 = $probs[1] ?? 0;
 
-                if ($prob0 && $prob1) {
-                    $label = $prob0 > $prob1 ? 0 : 1;
-                } elseif ($prob0) {
-                    $label = 0;
-                } elseif ($prob1) {
-                    $label = 1;
+                    if ($prob0 && $prob1) {
+                        $label = $prob0 > $prob1 ? 0 : 1;
+                    } elseif ($prob0) {
+                        $label = 0;
+                    } elseif ($prob1) {
+                        $label = 1;
+                    }
                 }
             }
+
+            if (! in_array($label, array_keys(static::$labels))) {
+                $label = 2;
+            }
+
+            $return[] = static::$labels[$label];
         }
 
-        if (! in_array($label, array_keys(static::$labels))) {
-            $label = 2;
-        }
-
-        return static::$labels[$label];
+        return is_string($text) ? $return[0] : $return;
     }
 }
