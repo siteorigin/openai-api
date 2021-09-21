@@ -36,4 +36,6 @@ jobs:
       - name: Execute tests
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_ORG: ${{ secrets.OPENAI_API_ORG }}
+          PRODUCT_DISCRIMINATION_MODEL: ${{ secrets.PRODUCT_DISCRIMINATION_MODEL }}
         run: vendor/bin/phpunit
