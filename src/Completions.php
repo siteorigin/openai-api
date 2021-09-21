@@ -5,7 +5,6 @@ namespace SiteOrigin\OpenAI;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
-use phpDocumentor\Reflection\Types\Object_;
 
 class Completions extends Request
 {
@@ -119,7 +118,7 @@ class Completions extends Request
         $return = array_map(fn ($completion) => $completion->choices, $responses);
 
         return (object) [
-            'choices' => array_merge(...$return)
+            'choices' => array_merge(...$return),
         ];
     }
 }

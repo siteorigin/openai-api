@@ -11,7 +11,7 @@ class Completions extends BaseCompletions
     public function __construct(Client $client, string $model, array $config = [])
     {
         $config = array_merge($config, [
-            'model' => $model
+            'model' => $model,
         ]);
         parent::__construct($client, Engines::ENGINELESS, $config);
     }

@@ -2,7 +2,6 @@
 
 namespace SiteOrigin\OpenAI\Tests\API;
 
-use SiteOrigin\OpenAI\FineTuned\TrueFalseClassifier;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
 
 class FineTuneCompletionsTest extends BaseTestCase
@@ -19,5 +18,4 @@ class FineTuneCompletionsTest extends BaseTestCase
         $results = $discriminator->discriminate($items);
         $this->assertNotEmpty($results);
     }
-
 }

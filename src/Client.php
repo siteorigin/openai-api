@@ -3,7 +3,6 @@
 namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Client as GuzzleClient;
-use JetBrains\PhpStorm\Pure;
 use SiteOrigin\OpenAI\FineTuned\FineTuned;
 
 class Client
