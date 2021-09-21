@@ -12,12 +12,20 @@ class Completions extends Request
 
     private array $config = [];
 
+    private $concurrency = 3;
+
     public function __construct(Client $client, string $engine = 'davinci', array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;
         $this->client = $client;
         $this->config = array_merge($this->config, $config);
+
+        if (isset($this->config['concurrency'])) {
+            // Concurrency is used by this wrapper, not OpenAI
+            $this->concurrency = (int) $this->config['concurrency'];
+            unset($this->config['concurrency']);
+        }
     }
 
     /**
@@ -34,15 +42,16 @@ class Completions extends Request
     /**
      * Complete the given text.
      *
-     * @param string $prompt The prompt string
+     * @param string|array $prompt The prompt string
      * @param array $config Any additional config
      *
+     * @return object
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
     public function complete(string|array $prompt = '', array $config = []): object
     {
         $config = array_merge($this->config, $config);
-        $config = array_merge($config, ['prompt' => $prompt]);
+        $config = array_merge($config, ['prompt' => is_array($prompt) ? array_values($prompt) : $prompt]);
 
         $response = $this->request(
             'POST',
@@ -57,27 +66,28 @@ class Completions extends Request
     }
 
     /**
-     * Synchronously complete multiple prompts using a Guzzle Pool of requests
+     * Chunk prompts into multiple requests that are performed in parallel
      *
-     * @param array|string[] $prompts
+     * @param string[][] $prompts
      * @param array $config
-     * @param int $concurrency
      * @return array
      */
-    public function completeMultiple(array $prompts = [], array $config = [], int $concurrency = 5): array
+    public function completeMultiple(array $prompts, array $config = [], bool $returnChoices = false): array
     {
         $requests = function ($prompts) use ($config) {
             // We need to return the prompt to keep track of the multiple requests
             $config = array_merge($this->config, $config);
 
             foreach ($prompts as $prompt) {
-                $config['prompt'] = $prompt;
                 yield fn () => $this->requestAsync(
                     "POST",
                     sprintf('engines/%s/completions', $this->engine),
                     [
                         'headers' => ['content-type' => 'application/json'],
-                        'body' => json_encode($config),
+                        'body' => json_encode(array_merge(
+                            $config,
+                            ['prompt' => is_array($prompt) ? array_values($prompt) : $prompt]
+                        )),
                     ]
                 );
             }
@@ -85,7 +95,7 @@ class Completions extends Request
 
         $return = [];
         $pool = new Pool($this->client->guzzleClient(), $requests($prompts), [
-            'concurrency' => 5,
+            'concurrency' => $this->concurrency,
             'fulfilled' => function (Response $response, $index) use (&$return) {
                 $return[$index] = json_decode($response->getBody()->getContents());
             },
@@ -97,6 +107,18 @@ class Completions extends Request
         // Wait for all the requests.
         $pool->promise()->wait();
         ksort($return);
+
+        if ($returnChoices) {
+            foreach ($return as $r) {
+                if (is_a($r, RequestException::class)) {
+                    // We need to handle request exceptions if we're returning choices
+                    throw $r;
+                }
+            }
+
+            $return = array_map(fn ($completion) => $completion->choices, $return);
+            $return = array_merge(...$return);
+        }
 
         return $return;
     }

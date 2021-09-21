@@ -34,23 +34,29 @@ class CompletionsTest extends BaseTestCase
     public function test_multiple_concurrent()
     {
         $client = $this->getClient();
+
+        $prompts = [
+            'Every little thing gonna be',
+            'Yesterday, all my troubles seemed so',
+            'Hello darkness my old',
+            "Life is what happens when you’re busy making other",
+            "You must be the change you wish to see in the",
+        ];
+
         $completions = $client->completions(Engines::BABBAGE)->completeMultiple(
-            [
-                'Every little thing gonna be',
-                'Yesterday, all my troubles seemed so',
-                'Hello darkness my old',
-            ],
+            array_chunk($prompts, 2),
             [
                 'max_tokens' => 32,
                 'temperature' => 0,
                 'stop' => ["\n", '.', ','],
-            ]
+            ],
+            true
         );
 
-        $r = array_map(fn ($completion) => trim($completion->choices[0]->text), $completions);
-
-        $this->assertEquals('alright', $r[0]);
-        $this->assertEquals('far away', $r[1]);
-        $this->assertEquals('friend', $r[2]);
+        $this->assertEquals(' alright', $completions[0]->text);
+        $this->assertEquals(' far away', $completions[1]->text);
+        $this->assertEquals(' friend', $completions[2]->text);
+        $this->assertEquals(' plans', $completions[3]->text);
+        $this->assertEquals(' world', $completions[4]->text);
     }
 }
