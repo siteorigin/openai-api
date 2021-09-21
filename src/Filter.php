@@ -37,6 +37,7 @@ class Filter extends Request
     private function complete(array $text)
     {
         $prompts = array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
+
         return $this->completion->completeConcurrent($prompts)->choices;
     }
 
