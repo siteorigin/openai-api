@@ -16,6 +16,8 @@ class FineTuneCompletionsTest extends BaseTestCase
         );
 
         $results = $discriminator->discriminate($items);
+        $results = array_combine($items, $results);
+
         $this->assertNotEmpty($results);
     }
 }

@@ -15,41 +15,35 @@ class Filter extends Request
         2 => 'unsafe',
     ];
 
-    public function __construct(Client $client, float $toxicThreshold = self::TOXIC_THRESHOLD)
+    protected array $config = [
+        'max_tokens' => 1,
+        'temperature' => 0.,
+        'top_p' => 0,
+        'logprobs' => 10,
+    ];
+
+    private Completions $completion;
+
+    public function __construct(Client $client, float $toxicThreshold = self::TOXIC_THRESHOLD, array $config = [])
     {
         parent::__construct($client);
+
+        $this->config = array_merge($this->config, $config);
+
+        $this->completion = $this->client->completions(self::ENGINE, $this->config);
         $this->toxicThreshold = $toxicThreshold;
     }
 
-    private function complete(string|array $text)
+    private function complete(array $text)
     {
-        $prompt = is_string($text) ?
-            "<|endoftext|>" . $text . "\n--\nLabel:" :
-            array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
-
-        $config = [
-            'prompt' => $prompt,
-            'max_tokens' => 1,
-            'temperature' => 0.,
-            'top_p' => 0,
-            'logprobs' => 10,
-        ];
-
-        $response = $this->request(
-            'POST',
-            sprintf('engines/%s/completions', self::ENGINE),
-            [
-                'headers' => ['content-type' => 'application/json'],
-                'body' => json_encode($config),
-            ]
-        );
-
-        return json_decode($response->getBody()->getContents())->choices;
+        $prompts = array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
+        return $this->completion->completeConcurrent($prompts)->choices;
     }
 
     public function classify(string|array $text): string|array
     {
-        $choices = $this->complete($text);
+        $choices = $this->complete(is_string($text) ? [$text] : $text);
+
         $return = [];
 
         foreach ($choices as $choice) {

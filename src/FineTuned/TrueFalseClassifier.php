@@ -6,8 +6,6 @@ use SiteOrigin\OpenAI\Client;
 
 class TrueFalseClassifier extends Completions
 {
-    const CHUNK_SIZE = 20;
-
     /**
      * @var array|string[]
      */
@@ -35,11 +33,8 @@ class TrueFalseClassifier extends Completions
 
     public function classify(array $items, array $config = [])
     {
-        $r = $this->completeMultiple(
-            array_chunk(
-                array_map(fn ($p) => $p . $this->separator, $items),
-                self::CHUNK_SIZE
-            ),
+        $r = $this->complete(
+            array_map(fn ($p) => $p . $this->separator, $items),
             $config
         );
 
@@ -64,8 +59,9 @@ class TrueFalseClassifier extends Completions
         }, $r->choices);
 
         $return = [];
+        $keys = array_keys($items);
         foreach ($result as $i => $v) {
-            $return[$items[$i]] = $v;
+            $return[$keys[$i]] = $v;
         }
 
         return $return;

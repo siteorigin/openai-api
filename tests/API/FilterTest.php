@@ -20,4 +20,15 @@ class FilterTest extends BaseTestCase
         $r = $this->getClient()->filter()->classify('ponies are fantastic!');
         $this->assertEquals('safe', $r);
     }
+
+    public function test_filter_concurrent()
+    {
+        $items = array_map(
+            fn ($item) => trim($item),
+            file(__DIR__ . '/../data/products.txt')
+        );
+
+        $classifications = $this->getClient()->filter()->classify($items);
+        $this->assertCount(160, $classifications);
+    }
 }

@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Response;
 
 class Completions extends Request
 {
+    const MAX_PER_REQUEST = 20;
+
     private string $engine;
 
     protected array $config = [];
@@ -50,6 +52,10 @@ class Completions extends Request
      */
     public function complete(string|array $prompt = '', array $config = []): object
     {
+        if (is_array($prompt) && count($prompt) > self::MAX_PER_REQUEST) {
+            return $this->completeConcurrent($prompt);
+        }
+
         $config = array_merge($this->config, $config);
         $config = array_merge($config, ['prompt' => is_array($prompt) ? array_values($prompt) : $prompt]);
 
@@ -66,14 +72,16 @@ class Completions extends Request
     }
 
     /**
-     * Chunk prompts into multiple requests that are performed in parallel
+     * Chunk prompts into multiple requests that are performed concurrently
      *
-     * @param string[][] $prompts
+     * @param string[] $prompts
      * @param array $config
      * @return object
      */
-    public function completeMultiple(array $prompts, array $config = []): object
+    public function completeConcurrent(array $prompts, array $config = []): object
     {
+        $prompts = array_chunk($prompts, self::MAX_PER_REQUEST);
+
         $requests = function ($prompts) use ($config) {
             // We need to return the prompt to keep track of the multiple requests
             $config = array_merge($this->config, $config);
@@ -100,20 +108,13 @@ class Completions extends Request
                 $responses[$index] = json_decode($response->getBody()->getContents());
             },
             'rejected' => function (RequestException $reason, $index) use (&$responses) {
-                $responses[$index] = $reason;
+                throw $reason;
             },
         ]);
 
         // Wait for all the requests.
         $pool->promise()->wait();
         ksort($responses);
-
-        foreach ($responses as $r) {
-            if (is_a($r, RequestException::class)) {
-                // We need to handle request exceptions if we're returning choices
-                throw $r;
-            }
-        }
 
         $return = array_map(fn ($completion) => $completion->choices, $responses);
 
