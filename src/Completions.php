@@ -107,7 +107,7 @@ class Completions extends Request
             'fulfilled' => function (Response $response, $index) use (&$responses) {
                 $responses[$index] = json_decode($response->getBody()->getContents());
             },
-            'rejected' => function (RequestException $reason, $index) use (&$responses) {
+            'rejected' => function (RequestException $reason) use (&$responses) {
                 throw $reason;
             },
         ]);
