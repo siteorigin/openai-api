@@ -5,14 +5,15 @@ namespace SiteOrigin\OpenAI;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
+use phpDocumentor\Reflection\Types\Object_;
 
 class Completions extends Request
 {
     private string $engine;
 
-    private array $config = [];
+    protected array $config = [];
 
-    private $concurrency = 3;
+    protected int $concurrency = 3;
 
     public function __construct(Client $client, string $engine = 'davinci', array $config = [])
     {
@@ -70,9 +71,9 @@ class Completions extends Request
      *
      * @param string[][] $prompts
      * @param array $config
-     * @return array
+     * @return object
      */
-    public function completeMultiple(array $prompts, array $config = [], bool $returnChoices = false): array
+    public function completeMultiple(array $prompts, array $config = []): object
     {
         $requests = function ($prompts) use ($config) {
             // We need to return the prompt to keep track of the multiple requests
@@ -81,7 +82,7 @@ class Completions extends Request
             foreach ($prompts as $prompt) {
                 yield fn () => $this->requestAsync(
                     "POST",
-                    sprintf('engines/%s/completions', $this->engine),
+                    $this->engine ? sprintf('engines/%s/completions', $this->engine) : 'completions',
                     [
                         'headers' => ['content-type' => 'application/json'],
                         'body' => json_encode(array_merge(
@@ -93,33 +94,32 @@ class Completions extends Request
             }
         };
 
-        $return = [];
+        $responses = [];
         $pool = new Pool($this->client->guzzleClient(), $requests($prompts), [
             'concurrency' => $this->concurrency,
-            'fulfilled' => function (Response $response, $index) use (&$return) {
-                $return[$index] = json_decode($response->getBody()->getContents());
+            'fulfilled' => function (Response $response, $index) use (&$responses) {
+                $responses[$index] = json_decode($response->getBody()->getContents());
             },
-            'rejected' => function (RequestException $reason, $index) use (&$return) {
-                $return[$index] = $reason;
+            'rejected' => function (RequestException $reason, $index) use (&$responses) {
+                $responses[$index] = $reason;
             },
         ]);
 
         // Wait for all the requests.
         $pool->promise()->wait();
-        ksort($return);
+        ksort($responses);
 
-        if ($returnChoices) {
-            foreach ($return as $r) {
-                if (is_a($r, RequestException::class)) {
-                    // We need to handle request exceptions if we're returning choices
-                    throw $r;
-                }
+        foreach ($responses as $r) {
+            if (is_a($r, RequestException::class)) {
+                // We need to handle request exceptions if we're returning choices
+                throw $r;
             }
-
-            $return = array_map(fn ($completion) => $completion->choices, $return);
-            $return = array_merge(...$return);
         }
 
-        return $return;
+        $return = array_map(fn ($completion) => $completion->choices, $responses);
+
+        return (object) [
+            'choices' => array_merge(...$return)
+        ];
     }
 }

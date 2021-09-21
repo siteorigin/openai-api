@@ -43,20 +43,19 @@ class CompletionsTest extends BaseTestCase
             "You must be the change you wish to see in the",
         ];
 
-        $completions = $client->completions(Engines::BABBAGE)->completeMultiple(
+        $r = $client->completions(Engines::BABBAGE)->completeMultiple(
             array_chunk($prompts, 2),
             [
                 'max_tokens' => 32,
                 'temperature' => 0,
                 'stop' => ["\n", '.', ','],
-            ],
-            true
+            ]
         );
 
-        $this->assertEquals(' alright', $completions[0]->text);
-        $this->assertEquals(' far away', $completions[1]->text);
-        $this->assertEquals(' friend', $completions[2]->text);
-        $this->assertEquals(' plans', $completions[3]->text);
-        $this->assertEquals(' world', $completions[4]->text);
+        $this->assertEquals(' alright', $r->choices[0]->text);
+        $this->assertEquals(' far away', $r->choices[1]->text);
+        $this->assertEquals(' friend', $r->choices[2]->text);
+        $this->assertEquals(' plans', $r->choices[3]->text);
+        $this->assertEquals(' world', $r->choices[4]->text);
     }
 }

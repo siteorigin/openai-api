@@ -3,6 +3,8 @@
 namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Client as GuzzleClient;
+use JetBrains\PhpStorm\Pure;
+use SiteOrigin\OpenAI\FineTuned\FineTuned;
 
 class Client
 {
@@ -77,5 +79,10 @@ class Client
     public function search(string $engine = Engines::ADA, array $config = []): Search
     {
         return new Search($this, $engine, $config);
+    }
+
+    public function fineTuned(string $model, array $config = []): FineTuned
+    {
+        return new FineTuned($this, $model, $config);
     }
 }
