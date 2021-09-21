@@ -53,7 +53,7 @@ class Completions extends Request
     public function complete(string|array $prompt = '', array $config = []): object
     {
         if (is_array($prompt) && count($prompt) > self::MAX_PER_REQUEST) {
-            return $this->completeConcurrent($prompt);
+            return $this->completeConcurrent($prompt, $config);
         }
 
         $config = array_merge($this->config, $config);
