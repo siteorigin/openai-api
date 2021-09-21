@@ -31,7 +31,7 @@ class CompletionsTest extends BaseTestCase
         ]);
     }
 
-    public function test_multiple_concurrent()
+    public function test_multiple_prompts()
     {
         $client = $this->getClient();
 
@@ -43,8 +43,8 @@ class CompletionsTest extends BaseTestCase
             "You must be the change you wish to see in the",
         ];
 
-        $r = $client->completions(Engines::BABBAGE)->completeMultiple(
-            array_chunk($prompts, 2),
+        $r = $client->completions(Engines::BABBAGE)->complete(
+            $prompts,
             [
                 'max_tokens' => 32,
                 'temperature' => 0,
