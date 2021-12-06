@@ -45,5 +45,4 @@ class EmbeddingsTest extends BaseTestCase
         $this->assertCount(30, $response->data);
         $this->assertCount(1024, $response->data[0]->embedding);
     }
-
 }

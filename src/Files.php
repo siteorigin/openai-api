@@ -145,6 +145,7 @@ class Files extends Request
     public function retrieveContent(string $id): string
     {
         $response = $this->request('GET', sprintf('files/%s/content', $id));
+
         return $response->getBody()->getContents();
     }
 }

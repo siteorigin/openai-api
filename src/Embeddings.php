@@ -76,7 +76,7 @@ class Embeddings extends Request
                     [
                         'headers' => ['content-type' => 'application/json'],
                         'json' => [
-                            'input' => is_array($text) ? array_values($text) : [$text]
+                            'input' => is_array($text) ? array_values($text) : [$text],
                         ],
                     ]
                 );

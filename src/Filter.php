@@ -46,7 +46,7 @@ class Filter extends Request
         $r = $this->complete(is_string($text) ? [$text] : $text);
 
         $result = array_map(
-            function($choice){
+            function ($choice) {
                 $label = (int) $choice->text;
                 if ($label == 2) {
                     $probs = (array) $choice->logprobs->top_logprobs[0];
@@ -69,10 +69,13 @@ class Filter extends Request
                 }
 
                 return static::$labels[$label];
-            }, $r->choices
+            },
+            $r->choices
         );
 
-        if(is_string($text)) return $result[0];
+        if (is_string($text)) {
+            return $result[0];
+        }
 
         // Make sure that the keys match the original input
         $return = [];

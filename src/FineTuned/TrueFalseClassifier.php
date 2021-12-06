@@ -33,7 +33,9 @@ class TrueFalseClassifier extends Completions
 
     public function classify(array $items, array $config = [])
     {
-        if(empty($items)) return [];
+        if (empty($items)) {
+            return [];
+        }
 
         $r = $this->complete(
             array_map(fn ($p) => $p . $this->separator, $items),
