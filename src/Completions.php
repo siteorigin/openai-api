@@ -20,7 +20,6 @@ class Completions extends Request
     {
         parent::__construct($client);
         $this->engine = $engine;
-        $this->client = $client;
         $this->config = array_merge($this->config, $config);
 
         if (isset($this->config['concurrency'])) {

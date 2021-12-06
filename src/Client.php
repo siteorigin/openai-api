@@ -55,6 +55,11 @@ class Client
         return new Completions($this, $engine, $config);
     }
 
+    public function embeddings(string $engine = null): Embeddings
+    {
+        return new Embeddings($this, $engine);
+    }
+
     public function engines(): Engines
     {
         return new Engines($this);
