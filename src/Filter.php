@@ -19,7 +19,7 @@ class Filter extends Request
         'max_tokens' => 1,
         'temperature' => 0.,
         'top_p' => 0,
-        'logprobs' => 10,
+        'logprobs' => 5,
     ];
 
     private Completions $completion;
@@ -38,40 +38,49 @@ class Filter extends Request
     {
         $prompts = array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
 
-        return $this->completion->completeConcurrent($prompts)->choices;
+        return $this->completion->complete($prompts);
     }
 
     public function classify(string|array $text): string|array
     {
-        $choices = $this->complete(is_string($text) ? [$text] : $text);
+        $r = $this->complete(is_string($text) ? [$text] : $text);
 
-        $return = [];
+        $result = array_map(
+            function($choice){
+                $label = (int) $choice->text;
+                if ($label == 2) {
+                    $probs = (array) $choice->logprobs->top_logprobs[0];
+                    if ($probs[2] < $this->toxicThreshold) {
+                        $prob0 = $probs[0] ?? 0;
+                        $prob1 = $probs[1] ?? 0;
 
-        foreach ($choices as $choice) {
-            $label = (int) $choice->text;
-            if ($label == 2) {
-                $probs = (array) $choice->logprobs->top_logprobs[0];
-                if ($probs[2] < $this->toxicThreshold) {
-                    $prob0 = $probs[0] ?? 0;
-                    $prob1 = $probs[1] ?? 0;
-
-                    if ($prob0 && $prob1) {
-                        $label = $prob0 > $prob1 ? 0 : 1;
-                    } elseif ($prob0) {
-                        $label = 0;
-                    } elseif ($prob1) {
-                        $label = 1;
+                        if ($prob0 && $prob1) {
+                            $label = $prob0 > $prob1 ? 0 : 1;
+                        } elseif ($prob0) {
+                            $label = 0;
+                        } elseif ($prob1) {
+                            $label = 1;
+                        }
                     }
                 }
-            }
 
-            if (! in_array($label, array_keys(static::$labels))) {
-                $label = 2;
-            }
+                if (! in_array($label, array_keys(static::$labels))) {
+                    $label = 2;
+                }
 
-            $return[] = static::$labels[$label];
+                return static::$labels[$label];
+            }, $r->choices
+        );
+
+        if(is_string($text)) return $result[0];
+
+        // Make sure that the keys match the original input
+        $return = [];
+        $keys = array_keys($text);
+        foreach ($result as $i => $v) {
+            $return[$keys[$i]] = $v;
         }
 
-        return is_string($text) ? $return[0] : $return;
+        return $return;
     }
 }
