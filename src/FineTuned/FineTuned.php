@@ -26,7 +26,7 @@ class FineTuned
         return new Completions($this->client, $this->model, $config);
     }
 
-    public function trueFalseClassifier(array $labels = ['false', 'true'], string $separator = ' =>', array $config = []): TrueFalseClassifier
+    public function trueFalseClassifier(array $labels = ['false', 'true'], string $separator = ' ->', array $config = []): TrueFalseClassifier
     {
         $config = array_merge($this->config, $config);
 

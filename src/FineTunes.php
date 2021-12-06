@@ -85,7 +85,7 @@ class FineTunes extends Request
      */
     public function events(string $fineTuneId): mixed
     {
-        $response = $this->request('GET', sprintf('fine-tunes/%s/list', $fineTuneId), [
+        $response = $this->request('GET', sprintf('fine-tunes/%s/events', $fineTuneId), [
             'headers' => ['content-type' => 'application/json'],
         ]);
 

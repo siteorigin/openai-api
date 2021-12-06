@@ -14,7 +14,7 @@ class Completions extends Request
 
     protected array $config = [];
 
-    protected int $concurrency = 3;
+    protected int $concurrency = 2;
 
     public function __construct(Client $client, string $engine = 'davinci', array $config = [])
     {

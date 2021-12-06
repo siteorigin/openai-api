@@ -16,6 +16,7 @@ class Files extends Request
     const SEARCH = 'search';
     const ANSWERS = 'answers';
     const CLASSIFICATIONS = 'classifications';
+    const FILE_TUNE = 'fine-tune';
 
     /**
      * Return a list of files.
@@ -133,5 +134,17 @@ class Files extends Request
         $response = $this->request('DELETE', sprintf('files/%s', $id));
 
         return json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     * Retrieve the content of the file.
+     *
+     * @param string $id
+     * @return string
+     */
+    public function retrieveContent(string $id): string
+    {
+        $response = $this->request('GET', sprintf('files/%s/content', $id));
+        return $response->getBody()->getContents();
     }
 }

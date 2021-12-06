@@ -22,7 +22,7 @@ class TrueFalseClassifier extends Completions
     ) {
         $config = array_merge($config, [
             'max_tokens' => 1,
-            'logprobs' => 10,
+            'logprobs' => 5,
             'temperature' => 0,
         ]);
         parent::__construct($client, $model, $config);
@@ -33,6 +33,8 @@ class TrueFalseClassifier extends Completions
 
     public function classify(array $items, array $config = [])
     {
+        if(empty($items)) return [];
+
         $r = $this->complete(
             array_map(fn ($p) => $p . $this->separator, $items),
             $config
