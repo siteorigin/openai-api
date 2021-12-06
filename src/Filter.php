@@ -41,7 +41,7 @@ class Filter extends Request
         return $this->completion->complete($prompts);
     }
 
-    public function classify(string|array $text): string|array
+    public function classify(string | array $text): string | array
     {
         $r = $this->complete(is_string($text) ? [$text] : $text);
 

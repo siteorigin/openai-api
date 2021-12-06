@@ -49,7 +49,7 @@ class Completions extends Request
      * @return object
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function complete(string|array $prompt = '', array $config = []): object
+    public function complete(string | array $prompt = '', array $config = []): object
     {
         if (is_array($prompt) && count($prompt) > self::MAX_PER_REQUEST) {
             return $this->completeConcurrent($prompt, $config);

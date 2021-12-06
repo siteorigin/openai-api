@@ -35,7 +35,7 @@ class Embeddings extends Request
     /**
      * @throws \Exception
      */
-    public function embed(string|array $text, string $engine = null): object
+    public function embed(string | array $text, ?string $engine = null): object
     {
         if (is_array($text) && count($text) > self::MAX_PER_REQUEST) {
             return $this->embedConcurrent($text);
@@ -43,7 +43,7 @@ class Embeddings extends Request
 
         $engine = $engine ?? $this->engine;
 
-        if (is_null($engine)) {
+        if (empty($engine)) {
             throw new \Exception('No engine specified');
         }
 
