@@ -52,7 +52,7 @@ class Embeddings extends Request
 
         // Make sure the text is a string
         $input = is_array($text) ? array_values($text) : [$text];
-        $input = array_map(fn($t) => (string) $t, $input);
+        $input = array_map(fn ($t) => (string) $t, $input);
 
         $response = $this->request('POST', sprintf('engines/%s/embeddings', $engine), [
             'json' => [
