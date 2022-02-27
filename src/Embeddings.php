@@ -44,12 +44,19 @@ class Embeddings extends Request
         $engine = $engine ?? $this->engine;
 
         if (empty($engine)) {
-            throw new \Exception('No engine specified');
+            throw new \InvalidArgumentException('No engine specified');
         }
+        if (empty($text)) {
+            throw new \InvalidArgumentException('No embed text specified');
+        }
+
+        // Make sure the text is a string
+        $input = is_array($text) ? array_values($text) : [$text];
+        $input = array_map(fn($t) => (string) $t, $input);
 
         $response = $this->request('POST', sprintf('engines/%s/embeddings', $engine), [
             'json' => [
-                'input' => is_array($text) ? array_values($text) : [$text],
+                'input' => $input,
             ],
         ]);
 
