@@ -17,7 +17,7 @@ class TrueFalseClassifier extends Completions
         Client $client,
         string $model,
         array $labels = ['false', 'true'],
-        string $separator = ' =>',
+        string $separator = ' ->',
         array $config = []
     ) {
         $config = array_merge($config, [
