@@ -31,15 +31,20 @@ class CompletionsTest extends BaseTestCase
         ]);
     }
 
-    public function test_multiple_concurrent()
+    public function test_multiple_prompts()
     {
         $client = $this->getClient();
-        $completions = $client->completions(Engines::BABBAGE)->completeMultiple(
-            [
-                'Every little thing gonna be',
-                'Yesterday, all my troubles seemed so',
-                'Hello darkness my old',
-            ],
+
+        $prompts = [
+            'Every little thing gonna be',
+            'Yesterday, all my troubles seemed so',
+            'Hello darkness my old',
+            "Life is what happens when you’re busy making other",
+            "You must be the change you wish to see in the",
+        ];
+
+        $r = $client->completions(Engines::BABBAGE)->complete(
+            $prompts,
             [
                 'max_tokens' => 32,
                 'temperature' => 0,
@@ -47,10 +52,10 @@ class CompletionsTest extends BaseTestCase
             ]
         );
 
-        $r = array_map(fn ($completion) => trim($completion->choices[0]->text), $completions);
-
-        $this->assertEquals('alright', $r[0]);
-        $this->assertEquals('far away', $r[1]);
-        $this->assertEquals('friend', $r[2]);
+        $this->assertEquals(' alright', $r->choices[0]->text);
+        $this->assertEquals(' far away', $r->choices[1]->text);
+        $this->assertEquals(' friend', $r->choices[2]->text);
+        $this->assertEquals(' plans', $r->choices[3]->text);
+        $this->assertEquals(' world', $r->choices[4]->text);
     }
 }

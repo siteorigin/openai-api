@@ -3,13 +3,14 @@
 namespace SiteOrigin\OpenAI\Exception;
 
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use RuntimeException;
 
 class BaseApiException extends RuntimeException
 {
     private ?string $type;
 
-    public function __construct(ClientException $clientException)
+    public function __construct(ClientException | ServerException $clientException)
     {
         $r = json_decode($clientException->getResponse()->getBody()->getContents());
 

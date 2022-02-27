@@ -39,6 +39,7 @@ abstract class Request
                 default => new RequestException($e),
             };
         } catch (GuzzleException $e) {
+            // TODO handle connect exception
             throw new RequestException($e);
         }
     }

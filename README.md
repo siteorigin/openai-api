@@ -1,9 +1,10 @@
 # A PHP wrapper for the OpenAI API
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/siteorigin/openai-api.svg?style=flat-square)](https://packagist.org/packages/siteorigin/openai-api)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/siteorigin/openai-api/run-tests?label=tests)](https://github.com/siteorigin/openai-api/actions?query=workflow%3ATests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/siteorigin/openai-api/Check%20&%20fix%20styling?label=code%20style)](https://github.com/siteorigin/openai-api/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/siteorigin/openai-api.svg?style=flat-square)](https://packagist.org/packages/siteorigin/openai-api)
+[![Latest Version on Packagist](https://badgen.net/packagist/v/siteorigin/openai-api)](https://packagist.org/packages/siteorigin/openai-api)
+[![PHP Version Requirement](https://badgen.net/packagist/php/siteorigin/openai-api)](https://packagist.org/packages/siteorigin/openai-api)
+[![GitHub Tests Action Status](https://github.com/siteorigin/openai-api/actions/workflows/run-tests.yml/badge.svg)](https://github.com/siteorigin/openai-api/actions?query=workflow%3ATests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://github.com/siteorigin/openai-api/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/siteorigin/openai-api/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![Total Downloads](https://badgen.net/packagist/dt/siteorigin/openai-api)](https://packagist.org/packages/siteorigin/openai-api)
 
 ---
 
@@ -75,6 +76,9 @@ $c = $client->classifications(Engines::BABBAGE)->create(
     [["A happy moment", "Positive"],["I am sad.", "Negative"],["I am feeling awesome", "Positive"]]
 );
 $c = $client->classifications()->create("I'm so happy to be alive", 'the-file-id');
+
+// Classify safe/unsafe content
+$f = $client->filter()->classify('ponies are fantastic!'); // 'safe'
 ```
 
 ## Testing

@@ -5,7 +5,7 @@
         "openai",
         "gpt-3"
     ],
-    "homepage": "https://github.com/siteorigin/openai_api",
+    "homepage": "https://github.com/siteorigin/openai-api",
     "license": "MIT",
     "authors": [
         {
