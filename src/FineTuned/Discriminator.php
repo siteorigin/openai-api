@@ -11,7 +11,7 @@ class Discriminator extends TrueFalseClassifier
         string $model,
         array $config = []
     ) {
-        parent::__construct($client, $model, ['fake', 'real'], ' =>', $config);
+        parent::__construct($client, $model, ['fake', 'real'], ' ->', $config);
     }
 
     public function discriminate(array $items): array
