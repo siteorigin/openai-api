@@ -35,7 +35,7 @@ class Embeddings extends Request
     /**
      * @throws \Exception
      */
-    public function embed(string | array $text, ?string $engine = null, array $config  = []): object
+    public function embed(string | array $text, ?string $engine = null, array $config = []): object
     {
         if (is_array($text) && count($text) > self::MAX_PER_REQUEST) {
             return $this->embedConcurrent($text);
