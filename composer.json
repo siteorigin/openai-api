@@ -19,12 +19,12 @@
         "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.7",
         "larapack/dd": "^1.1",
         "phpunit/phpunit": "^9.5",
         "psy/psysh": "@stable",
         "spatie/ray": "^1.27",
-        "vimeo/psalm": "^4.3",
+        "vimeo/psalm": "^4.22",
         "vlucas/phpdotenv": "^5.3"
     },
     "autoload": {
