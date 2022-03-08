@@ -19,7 +19,7 @@ class Embeddings extends Request
 
     protected int $concurrency = 2;
 
-    public function __construct(Client $client, string $engine = null, $config = [])
+    public function __construct(Client $client, string $engine = null, array $config = [])
     {
         parent::__construct($client);
         $this->engine = $engine;
@@ -35,7 +35,7 @@ class Embeddings extends Request
     /**
      * @throws \Exception
      */
-    public function embed(string | array $text, ?string $engine = null): object
+    public function embed(string | array $text, ?string $engine = null, array $config  = []): object
     {
         if (is_array($text) && count($text) > self::MAX_PER_REQUEST) {
             return $this->embedConcurrent($text);
@@ -54,10 +54,11 @@ class Embeddings extends Request
         $input = is_array($text) ? array_values($text) : [$text];
         $input = array_map(fn ($t) => (string) $t, $input);
 
+        $config = array_merge($this->config, $config);
         $response = $this->request('POST', sprintf('engines/%s/embeddings', $engine), [
-            'json' => [
+            'json' => array_merge($config, [
                 'input' => $input,
-            ],
+            ]),
         ]);
 
         return json_decode($response->getBody()->getContents());
