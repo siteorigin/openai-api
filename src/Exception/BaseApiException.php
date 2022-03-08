@@ -14,8 +14,8 @@ class BaseApiException extends RuntimeException
     {
         $r = json_decode($clientException->getResponse()->getBody()->getContents());
 
-        $this->type = $r->message->type ?? null;
-        $message = $r->message->message ?? null;
+        $this->type = $r->error->type ?? null;
+        $message = $r->error->message ?? null;
 
         parent::__construct($message, (int) $clientException->getCode(), $clientException);
     }
