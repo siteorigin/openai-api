@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.2 - 8 March 2022
+* Added support for extra args to filter API
+
 ## 1.1.1 - 8 March 2022
 * Added support for extra args to embedding API
 * Updated default discriminator separator to ->
