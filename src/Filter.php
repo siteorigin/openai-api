@@ -34,16 +34,16 @@ class Filter extends Request
         $this->toxicThreshold = $toxicThreshold;
     }
 
-    private function complete(array $text)
+    private function complete(array $text, array $config = [])
     {
         $prompts = array_map(fn ($t) => "<|endoftext|>" . $t . "\n--\nLabel:", $text);
 
-        return $this->completion->complete($prompts);
+        return $this->completion->complete($prompts, $config);
     }
 
-    public function classify(string | array $text): string | array
+    public function classify(string | array $text, array $config = []): string | array
     {
-        $r = $this->complete(is_string($text) ? [$text] : $text);
+        $r = $this->complete(is_string($text) ? [$text] : $text, $config);
 
         $result = array_map(
             function ($choice) {

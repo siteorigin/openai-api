@@ -31,4 +31,12 @@ class FilterTest extends BaseTestCase
         $classifications = $this->getClient()->filter()->classify($items);
         $this->assertCount(160, $classifications);
     }
+
+    public function test_filter_with_user()
+    {
+        $r = $this->getClient()->filter()->classify('ponies!', [
+            'user' => 'test_user',
+        ]);
+        $this->assertEquals('safe', $r);
+    }
 }
