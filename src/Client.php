@@ -70,9 +70,9 @@ class Client
         return new Files($this);
     }
 
-    public function filter(float $toxicThreshold = Filter::TOXIC_THRESHOLD): Filter
+    public function filter(float $toxicThreshold = Filter::TOXIC_THRESHOLD, array $config = []): Filter
     {
-        return new Filter($this, $toxicThreshold);
+        return new Filter($this, $toxicThreshold, $config);
     }
 
     public function fineTunes(): FineTunes
