@@ -6,11 +6,11 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
 
-class Completions extends Action
+class Edits extends Action
 {
-    public function __construct(Client $client, string $model = Models::TEXT_DAVINCI, array $config = [])
+    public function __construct(Client $client, string $model = Models::TEXT_DAVINCI_EDIT, array $config = [])
     {
-        parent::__construct($client, 'completions', 'choices', $model, $config);
+        parent::__construct($client, 'edits', 'choices', $model, $config);
     }
 
     /**

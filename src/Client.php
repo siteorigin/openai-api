@@ -40,19 +40,14 @@ class Client
         return $this->guzzle;
     }
 
-    public function answers(string $engine = Engines::CURIE, array $config = []): Answers
-    {
-        return new Answers($this, $engine, $config);
-    }
-
-    public function classifications(string $engine = Engines::CURIE, array $config = []): Classifications
-    {
-        return new Classifications($this, $engine, $config);
-    }
-
-    public function completions(string $engine = 'davinci', array $config = []): Completions
+    public function completions(string $engine = Models::TEXT_DAVINCI, array $config = []): Completions
     {
         return new Completions($this, $engine, $config);
+    }
+
+    public function edits(string $engine = Models::TEXT_DAVINCI_EDIT, array $config = []): Edits
+    {
+        return new Edits($this, $engine, $config);
     }
 
     public function embeddings(string $engine = null, array $config = []): Embeddings
@@ -60,9 +55,9 @@ class Client
         return new Embeddings($this, $engine, $config);
     }
 
-    public function engines(): Engines
+    public function engines(): Models
     {
-        return new Engines($this);
+        return new Models($this);
     }
 
     public function files(): Files
@@ -78,11 +73,6 @@ class Client
     public function fineTunes(): FineTunes
     {
         return new FineTunes($this);
-    }
-
-    public function search(string $engine = Engines::ADA, array $config = []): Search
-    {
-        return new Search($this, $engine, $config);
     }
 
     public function fineTuned(string $model, array $config = []): FineTuned

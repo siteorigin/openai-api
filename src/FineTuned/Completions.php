@@ -4,7 +4,7 @@ namespace SiteOrigin\OpenAI\FineTuned;
 
 use SiteOrigin\OpenAI\Client;
 use SiteOrigin\OpenAI\Completions as BaseCompletions;
-use SiteOrigin\OpenAI\Engines;
+use SiteOrigin\OpenAI\Models;
 
 class Completions extends BaseCompletions
 {
@@ -13,6 +13,6 @@ class Completions extends BaseCompletions
         $config = array_merge($config, [
             'model' => $model,
         ]);
-        parent::__construct($client, Engines::ENGINELESS, $config);
+        parent::__construct($client, Models::ENGINELESS, $config);
     }
 }

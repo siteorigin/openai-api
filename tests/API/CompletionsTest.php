@@ -2,7 +2,7 @@
 
 namespace SiteOrigin\OpenAI\Tests\API;
 
-use SiteOrigin\OpenAI\Engines;
+use SiteOrigin\OpenAI\Models;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
 
@@ -43,7 +43,7 @@ class CompletionsTest extends BaseTestCase
             "You must be the change you wish to see in the",
         ];
 
-        $r = $client->completions(Engines::BABBAGE)->complete(
+        $r = $client->completions(Models::BABBAGE)->complete(
             $prompts,
             [
                 'max_tokens' => 32,
