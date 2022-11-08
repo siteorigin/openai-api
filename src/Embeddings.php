@@ -6,15 +6,12 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
 
-/**
- * @todo Consolidate this with the completion class
- */
 class Embeddings extends Action
 {
 
     public function __construct(Client $client, string $model = Models::TEXT_SIMILARITY_ADA, array $config = [])
     {
-        parent::__construct($client, 'embeddings', 'data', $model, $config);
+        parent::__construct($client, 'embeddings', 'input', 'data', $model, $config);
     }
 
     /**

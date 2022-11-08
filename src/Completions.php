@@ -10,7 +10,7 @@ class Completions extends Action
 {
     public function __construct(Client $client, string $model = Models::TEXT_DAVINCI, array $config = [])
     {
-        parent::__construct($client, 'completions', 'choices', $model, $config);
+        parent::__construct($client, 'completions', 'prompt', 'choices', $model, $config);
     }
 
     /**

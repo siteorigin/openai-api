@@ -16,8 +16,9 @@ class Action extends Request
 
     private string $dataKey;
     private string $endpoint;
+    private string $inputKey;
 
-    public function __construct(Client $client, string $endpoint, string $dataKey, string $model, array $config = [])
+    public function __construct(Client $client, string $endpoint, string $inputKey, string $dataKey, string $model, array $config = [])
     {
         parent::__construct($client);
         $this->config = array_merge($this->config, $config, ['model' => $model]);
@@ -29,6 +30,7 @@ class Action extends Request
         }
         $this->dataKey = $dataKey;
         $this->endpoint = $endpoint;
+        $this->inputKey = $inputKey;
     }
 
     /**
@@ -44,20 +46,20 @@ class Action extends Request
     /**
      * Complete the given text.
      *
-     * @param string|array $prompt The prompt string
+     * @param string|array $input The input string or strings
      * @param array $config Any additional config
      *
      * @return object
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function action(string | array $prompt = '', array $config = []): object
+    protected function action(string | array $input = '', array $config = []): object
     {
-        if (is_array($prompt) && count($prompt) > self::MAX_PER_REQUEST) {
-            return $this->actionConcurrent($prompt, $config);
+        if (is_array($input) && count($input) > self::MAX_PER_REQUEST) {
+            return $this->actionConcurrent($input, $config);
         }
 
         $config = array_merge($this->config, $config);
-        $config = array_merge($config, ['prompt' => is_array($prompt) ? array_values($prompt) : $prompt]);
+        $config = array_merge($config, [$this->inputKey => is_array($input) ? array_values($input) : $input]);
 
         $response = $this->request(
             'POST',
@@ -74,13 +76,13 @@ class Action extends Request
     /**
      * Chunk prompts into multiple requests that are performed concurrently
      *
-     * @param string[] $prompts
+     * @param string[] $inputs
      * @param array $config
      * @return object
      */
-    public function actionConcurrent(array $prompts, array $config = []): object
+    protected function actionConcurrent(array $inputs, array $config = []): object
     {
-        $prompts = array_chunk($prompts, self::MAX_PER_REQUEST);
+        $inputs = array_chunk($inputs, self::MAX_PER_REQUEST);
 
         $requests = function ($prompts) use ($config) {
             // We need to return the prompt to keep track of the multiple requests
@@ -94,7 +96,7 @@ class Action extends Request
                         'headers' => ['content-type' => 'application/json'],
                         'body' => json_encode(array_merge(
                             $config,
-                            ['prompt' => is_array($prompt) ? array_values($prompt) : $prompt]
+                            [$this->inputKey => is_array($prompt) ? array_values($prompt) : $prompt]
                         )),
                     ]
                 );
@@ -102,7 +104,7 @@ class Action extends Request
         };
 
         $responses = [];
-        $pool = new Pool($this->client->guzzleClient(), $requests($prompts), [
+        $pool = new Pool($this->client->guzzleClient(), $requests($inputs), [
             'concurrency' => $this->concurrency,
             'fulfilled' => function (Response $response, $index) use (&$responses) {
                 $responses[$index] = json_decode($response->getBody()->getContents());

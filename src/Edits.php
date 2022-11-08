@@ -10,32 +10,21 @@ class Edits extends Action
 {
     public function __construct(Client $client, string $model = Models::TEXT_DAVINCI_EDIT, array $config = [])
     {
-        parent::__construct($client, 'edits', 'choices', $model, $config);
+        parent::__construct($client, 'edits', 'input', 'choices', $model, $config);
     }
 
     /**
      * Complete the given text.
      *
-     * @param string|array $prompt The prompt string
+     * @param string $input
+     * @param string $instruction
      * @param array $config Any additional config
      *
      * @return object
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function complete(string | array $prompt = '', array $config = []): object
+    public function edit(string $input = '', string $instruction, array $config = []): object
     {
-        return $this->action($prompt, $config);
-    }
-
-    /**
-     * Chunk prompts into multiple requests that are performed concurrently
-     *
-     * @param string[] $prompts
-     * @param array $config
-     * @return object
-     */
-    public function completeConcurrent(array $prompts, array $config = []): object
-    {
-        return $this->actionConcurrent($prompts, $config);
+        return $this->action($input, array_merge($config, ['instruction' => $instruction]));
     }
 }
