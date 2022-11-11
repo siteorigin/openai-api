@@ -2,8 +2,8 @@
 
 namespace SiteOrigin\OpenAI\Tests\API;
 
-use SiteOrigin\OpenAI\Models;
 use SiteOrigin\OpenAI\Exception\AuthorizationException;
+use SiteOrigin\OpenAI\Models;
 use SiteOrigin\OpenAI\Tests\BaseTestCase;
 
 class CompletionsTest extends BaseTestCase

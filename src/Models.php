@@ -26,7 +26,6 @@ class Models extends Request
     const TEXT_SEARCH_ADA_DOC = 'text-search-ada-doc-001';
     const TEXT_SEARCH_ADA_QUERY = 'text-search-ada-query-001';
 
-
     /**
      * Return a list of engines
      *

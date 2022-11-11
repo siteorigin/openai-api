@@ -4,7 +4,6 @@ namespace SiteOrigin\OpenAI\FineTuned;
 
 use SiteOrigin\OpenAI\Client;
 use SiteOrigin\OpenAI\Completions as BaseCompletions;
-use SiteOrigin\OpenAI\Models;
 
 class Completions extends BaseCompletions
 {
