@@ -13,6 +13,6 @@ class Completions extends BaseCompletions
         $config = array_merge($config, [
             'model' => $model,
         ]);
-        parent::__construct($client, Models::ENGINELESS, $config);
+        parent::__construct($client, $model, $config);
     }
 }
