@@ -4,7 +4,7 @@ namespace SiteOrigin\OpenAI;
 
 class Models extends Request
 {
-    const TEXT_DAVINCI = 'text-davinci-002';
+    const TEXT_DAVINCI = 'text-davinci-003';
     const TEXT_CURIE = 'text-curie-001';
     const TEXT_BABBAGE = 'text-babbage-001';
     const TEXT_ADA = 'text-ada-001';
