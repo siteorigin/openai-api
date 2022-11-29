@@ -40,6 +40,7 @@ class Action extends Request
     public function setModel(string $model): static
     {
         $this->config = array_merge($this->config, ['model' => $model]);
+
         return $this;
     }
 

@@ -2,10 +2,6 @@
 
 namespace SiteOrigin\OpenAI;
 
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Response;
-
 class Edits extends Action
 {
     public function __construct(Client $client, string $model = Models::TEXT_DAVINCI_EDIT, array $config = [])

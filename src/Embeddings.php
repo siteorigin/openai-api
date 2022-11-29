@@ -2,13 +2,8 @@
 
 namespace SiteOrigin\OpenAI;
 
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Response;
-
 class Embeddings extends Action
 {
-
     public function __construct(Client $client, string $model = Models::TEXT_SIMILARITY_ADA, array $config = [])
     {
         parent::__construct($client, 'embeddings', 'input', 'data', $model, $config);
