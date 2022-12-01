@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": "^8.0",
+        "caseyamcl/guzzle_retry_middleware": "^2.8",
         "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {

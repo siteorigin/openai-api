@@ -3,6 +3,8 @@
 namespace SiteOrigin\OpenAI;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\HandlerStack;
+use GuzzleRetry\GuzzleRetryMiddleware;
 use SiteOrigin\OpenAI\FineTuned\FineTuned;
 
 class Client
@@ -16,7 +18,12 @@ class Client
 
     private GuzzleClient $guzzle;
 
-    public function __construct(string $apiKey = null, string $organization = null)
+    /**
+     * @param string $apiKey
+     * @param string|null $organization
+     * @param array|null $retries A retries config array for GuzzleRetryMiddleware. See https://github.com/caseyamcl/guzzle_retry_middleware
+     */
+    public function __construct(string $apiKey, string $organization = null, ?array $retries = null)
     {
         $this->apiKey = $apiKey ?: (! empty($_ENV['OPENAI_API_KEY']) ? $_ENV['OPENAI_API_KEY'] : null);
         $this->organization = $organization ?: (! empty($_ENV['OPENAI_API_ORG']) ? $_ENV['OPENAI_API_ORG'] : null);
@@ -29,9 +36,15 @@ class Client
             $headers['OpenAI-Organization'] = $this->organization;
         }
 
+        $stack = HandlerStack::create();
+        if(!is_null($retries)) {
+            $stack->push(GuzzleRetryMiddleware::factory($retries));
+        }
+
         $this->guzzle = new GuzzleClient([
             'base_uri' => sprintf('https://api.openai.com/%s/', self::VERSION),
             'headers' => $headers,
+            'handler' => $stack,
         ]);
     }
 
