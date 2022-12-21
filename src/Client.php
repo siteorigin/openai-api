@@ -63,7 +63,7 @@ class Client
         return new Edits($this, $engine, $config);
     }
 
-    public function embeddings(string $engine = null, array $config = []): Embeddings
+    public function embeddings(string $engine = Models::TEXT_EMBED, array $config = []): Embeddings
     {
         return new Embeddings($this, $engine, $config);
     }
