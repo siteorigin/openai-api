@@ -37,7 +37,7 @@ class Client
         }
 
         $stack = HandlerStack::create();
-        if(!is_null($retries)) {
+        if (! is_null($retries)) {
             $stack->push(GuzzleRetryMiddleware::factory($retries));
         }
 
