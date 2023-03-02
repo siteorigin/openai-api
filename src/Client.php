@@ -53,6 +53,11 @@ class Client
         return $this->guzzle;
     }
 
+    public function chat(string $engine = Models::CHAT, array $config = []): Chat
+    {
+        return new Chat($this, $engine, $config);
+    }
+
     public function completions(string $engine = Models::TEXT_DAVINCI, array $config = []): Completions
     {
         return new Completions($this, $engine, $config);

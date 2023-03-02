@@ -19,7 +19,7 @@ class Edits extends Action
      * @return object
      * @see https://beta.openai.com/docs/api-reference/completions/create
      */
-    public function edit(string $input = '', string $instruction, array $config = []): object
+    public function edit(string $input, string $instruction, array $config = []): object
     {
         return $this->action($input, array_merge($config, ['instruction' => $instruction]));
     }

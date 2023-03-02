@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Response;
 class Action extends Request
 {
     const MAX_PER_REQUEST = 20;
+    const MAX_PER_REQUEST_CHAT = 1;
 
     protected array $config = [];
 
@@ -55,7 +56,8 @@ class Action extends Request
      */
     protected function action(string | array $input = '', array $config = []): object
     {
-        if (is_array($input) && count($input) > self::MAX_PER_REQUEST) {
+        // If we're using the chat endpoint
+        if (is_array($input) && count($input) > self::MAX_PER_REQUEST && $this->endpoint !== 'chat/completions') {
             return $this->actionConcurrent($input, $config);
         }
 
@@ -83,7 +85,9 @@ class Action extends Request
      */
     protected function actionConcurrent(array $inputs, array $config = []): object
     {
-        $inputs = array_chunk($inputs, self::MAX_PER_REQUEST);
+        if($this->endpoint !== 'chat/completions') {
+            $inputs = array_chunk($inputs, self::MAX_PER_REQUEST);
+        }
 
         $requests = function ($prompts) use ($config) {
             // We need to return the prompt to keep track of the multiple requests

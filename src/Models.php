@@ -4,6 +4,9 @@ namespace SiteOrigin\OpenAI;
 
 class Models extends Request
 {
+    const CHAT = 'gpt-3.5-turbo';
+    const WHISPER = 'whisper-1';
+
     const TEXT_DAVINCI = 'text-davinci-003';
     const TEXT_CURIE = 'text-curie-001';
     const TEXT_BABBAGE = 'text-babbage-001';
