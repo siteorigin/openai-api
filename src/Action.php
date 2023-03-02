@@ -85,7 +85,7 @@ class Action extends Request
      */
     protected function actionConcurrent(array $inputs, array $config = []): object
     {
-        if($this->endpoint !== 'chat/completions') {
+        if ($this->endpoint !== 'chat/completions') {
             $inputs = array_chunk($inputs, self::MAX_PER_REQUEST);
         }
 
